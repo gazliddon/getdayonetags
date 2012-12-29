@@ -1,6 +1,6 @@
 Todo:
 	- Change all devices to DropBox only for DayOne
-	- Add project to github	
+	- Add project to github	 @done(2012-12-29)
 	- Edit project file so it ignores sublime workspace
 	- Can I make it save the worksapce in an out dir? @question
 	- Make a planning dir and put taskpaper in it
@@ -9,6 +9,7 @@ Todo:
 		- How do I find out the document type used by mdfind for Day One tasks?
 		- Is there a Ruby lib for Day One?
 		- What's the Ruby Lib for bridging to AppleScript?
+		- How does bundler work? I need this for adding gems I need
 
 Notes:
 Archive:

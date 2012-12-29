@@ -4,5 +4,15 @@
 		{
 			"path": "/Users/gaz/development/getdayonetags"
 		}
-	]
+	],
+
+    "folders":
+    [
+        {
+            "path": ".",
+            "folder_exclude_patterns": ["out"],
+            "file_exclude_patterns" : ["*.sublime-workspace", ".gitignore"]
+
+        }
+    ]
 }
