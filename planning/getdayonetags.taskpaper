@@ -2,7 +2,6 @@ Todo:
 	- Split TagStore into it's own file
 	- Gte TagStore working
 	- 
-
 	Research:
 		- Active record stuff from command line here: 
 			http://www.oreillynet.com/pub/a/ruby/2007/06/21/how-to-build-simple-console-apps-with-ruby-and-activerecord.html
