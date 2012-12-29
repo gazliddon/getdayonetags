@@ -18,31 +18,6 @@ def get_tags_from_str str_with_tags, filter
   class Test < Thor
     include Thor::Actions
 
-    def find_journals
-      journals =  exec %q{mdfind "kMDItemKind == 'Day One Journal' && kMDItemDisplayName =='Journal.dayone'"}
-      lib_dir = File.expand_path "~/Library"
-      journals.select {|j| !%r{^#{lib_dir}/.*$}}
-    end
-
-    def find_entries
-      journals = find_journals
-      entries = journals.collect { |j| Dir["#{j}/**/*.doentry"]}.flatten
-
-      return entries
-      uuid = {}
-
-      entries = entries.select do |e|
-        this_uuuid = e["UUID"]
-        if uuid[this_uuuid]
-          false
-        else
-          uuid[this_uuuid] = true
-          true
-        end
-      end
-
-      entries
-    end
 
     desc "tags", "Find all tags"
     method_option :filter, :type => :array, :required => false, :aliases => "-f"
@@ -74,6 +49,33 @@ def get_tags_from_str str_with_tags, filter
       pp res
 
   end # def tags
+
+  private
+    def find_journals
+      journals =  exec %q{mdfind "kMDItemKind == 'Day One Journal' && kMDItemDisplayName =='Journal.dayone'"}
+      lib_dir = File.expand_path "~/Library"
+      journals.select {|j| !%r{^#{lib_dir}/.*$}}
+    end
+
+    def find_entries
+      journals = find_journals
+      entries = journals.collect { |j| Dir["#{j}/**/*.doentry"]}.flatten
+
+      return entries
+      uuid = {}
+
+      entries = entries.select do |e|
+        this_uuuid = e["UUID"]
+        if uuid[this_uuuid]
+          false
+        else
+          uuid[this_uuuid] = true
+          true
+        end
+      end
+
+      entries
+    end
 
 
 end
