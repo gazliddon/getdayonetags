@@ -1,7 +1,7 @@
 Todo:
-	- Test that excluding Library journal files on air works 
-	- Handle this sort of tag @project(kjsakjs  ksa sal ska)
-	- Get the Date Modified info for the file and store in tagged line record @done(2012-12-29)
+	- Split TagStore into it's own file
+	- Gte TagStore working
+	- 
 
 	Research:
 		- Active record stuff from command line here: 
@@ -17,6 +17,9 @@ Notes:
 	- @question Ask on sublime forums if I can overide where the workspace is save via the project file
 	- @read http://net.tutsplus.com/tutorials/tools-and-tips/sublime-text-2-tips-and-tricks/
 Archive:
+	- Test that excluding Library journal files on air works  @done(2012-12-29) @project(Todo)
+	- Get the Date Modified info for the file and store in tagged line record @done(2012-12-29) @project(Todo)
+	- Handle this sort of tag @project(Todo) @done(2012-12-29)
 	- Get multiple tags if any @done(2012-12-29) @project(Todo)
 	- Set up a build environment in project file @done(2012-12-29) @project(Todo)
 	- Test via Rake and then build via rake in project file @done(2012-12-29) @project(Todo)

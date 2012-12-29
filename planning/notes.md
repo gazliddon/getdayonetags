@@ -5,7 +5,7 @@
 ### Solved
 <pre>mdfind "kMDItemKind == 'Day One Journal' && kMDItemDisplayName =='Journal.dayone'"</pre>
 
-Only slight wrinkle is that on my air this also finds a journal in user Library. I filter out anything in that dir
+Only slight wrinkle is that on my air this also finds a journal in user Library. I filter out anything in that dir.
 
 ### Notes
 
