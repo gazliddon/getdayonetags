@@ -13,9 +13,11 @@ class Test < Thor
     filter = options[:filter]
     fp = filter ? lambda {|x| filter.include? x} : lambda {|x| true}
 
-    tag_store = TagStore.new do |ts|
-      find_journals.each {|journal| ts.add_journal journal}
+    tag_store = Gaz::TagStore.new do |ts|
+      find_journals.each {|journal| ts.add_journal(journal) }
     end
+
+    tag_store.dump
 
   end # def tags
 
