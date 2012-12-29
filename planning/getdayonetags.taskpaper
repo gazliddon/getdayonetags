@@ -1,15 +1,33 @@
 Todo:
-	- Change all devices to DropBox only for DayOne
-	- Add project to github	 @done(2012-12-29)
-	- Edit project file so it ignores sublime workspace
-	- Can I make it save the worksapce in an out dir? @question
-	- Make a planning dir and put taskpaper in it
-	- Test via Rake and then build via rake in project file
+	- Test via Rake and then build via rake in project file @done(2012-12-29)
+	- Find all of the lines with tags @done(2012-12-29)
+	- Get multiple tags if any
+	- Handle this sort of tag @project(kjsakjs  ksa sal ska)
+	- Contruct a tagged item record
+		- File it came from
+		- Last edit date
+	
 	Research:
-		- How do I find out the document type used by mdfind for Day One tasks?
-		- Is there a Ruby lib for Day One?
+		- Active record stuff from command line here: 
+			http://www.oreillynet.com/pub/a/ruby/2007/06/21/how-to-build-simple-console-apps-with-ruby-and-activerecord.html
 		- What's the Ruby Lib for bridging to AppleScript?
 		- How does bundler work? I need this for adding gems I need
-
 Notes:
+	- I like Mou, markdown editor with live preview @handy
+		Currently in Beta but v handy
+	- Add enter glyph to TextExpander @todo
+	- Change macbook air so TP short cut is ⇧⌘Enter @todo
+	- DropBox on DayOne for work laptop @todo
+	- @question Ask on sublime forums if I can overide where the workspace is save via the project file
+	- @read http://net.tutsplus.com/tutorials/tools-and-tips/sublime-text-2-tips-and-tricks/
 Archive:
+	- Get the correct mdfind query to get a list of DayOne documents @done(2012-12-29) @project(Todo)
+		- Hacky first @done(2012-12-29)
+	- How do I find out the document type used by mdfind for Day One tasks? @done(2012-12-29) @project(Todo / Research)
+	- Is there a Ruby lib for Day One? @done(2012-12-29) @project(Todo / Research)
+	- Edit project file so it ignores sublime workspace @done(2012-12-29) @project(Todo)
+	- Make a planning dir and put taskpaper in it @done(2012-12-29) @project(Todo)
+	- DP on DayOne for iPad Mini @done(2012-12-29) @project(Todo)
+	- DP on DayOne for work iPad @done(2012-12-29) @project(Todo)
+	- DP on DayOne for home mac @done(2012-12-29) @project(Todo)
+	- Add project to github	 @done(2012-12-29) @project(Todo)

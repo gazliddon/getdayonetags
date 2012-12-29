@@ -1,5 +1,5 @@
 # Rakefile
 
 task :default do
-	puts "Rake done"
+	 sh "ruby getdayonetags.rb get_tags"
 end
