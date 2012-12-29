@@ -1,0 +1,13 @@
+Todo:
+		
+	- Edit project file so it ignores sublime workspace
+	- Can I make it save the worksapce in an out dir? @question
+	- Make a planning dir and put taskpaper in it
+	- Test via Rake and then build via rake in project file
+	Research:
+		- How do I find out the document type used by mdfind for Day One tasks?
+		- Is there a Ruby lib for Day One?
+		- What's the Ruby Lib for bridging to AppleScript?
+
+Notes:
+Archive:
