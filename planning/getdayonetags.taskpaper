@@ -1,11 +1,12 @@
 Todo:
-	- Test via Rake and then build via rake in project file @done(2012-12-29)
-	- Find all of the lines with tags @done(2012-12-29)
 	- Get multiple tags if any
 	- Handle this sort of tag @project(kjsakjs  ksa sal ska)
 	- Contruct a tagged item record
 		- File it came from
 		- Last edit date
+		- Tags
+	- Set up a build environment in project file
+
 	
 	Research:
 		- Active record stuff from command line here: 
@@ -21,6 +22,8 @@ Notes:
 	- @question Ask on sublime forums if I can overide where the workspace is save via the project file
 	- @read http://net.tutsplus.com/tutorials/tools-and-tips/sublime-text-2-tips-and-tricks/
 Archive:
+	- Test via Rake and then build via rake in project file @done(2012-12-29) @project(Todo)
+	- Find all of the lines with tags @done(2012-12-29) @project(Todo)
 	- Get the correct mdfind query to get a list of DayOne documents @done(2012-12-29) @project(Todo)
 		- Hacky first @done(2012-12-29)
 	- How do I find out the document type used by mdfind for Day One tasks? @done(2012-12-29) @project(Todo / Research)
