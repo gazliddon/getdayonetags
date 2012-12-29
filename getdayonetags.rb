@@ -3,7 +3,7 @@ require "pp"
 require "PList"
 
 def exec com_str
-  %x{#{com_str}}.split("/n").collect { |item| item.rstrip}
+  %x{#{com_str}}.split("\n").collect { |item| item.rstrip}
 end
 
 class Test < Thor
