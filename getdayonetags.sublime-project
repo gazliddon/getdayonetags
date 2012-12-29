@@ -2,7 +2,7 @@
 	"folders":
 	[
 		{
-			"path": "/Users/gaz/development/getdayonetags"
+			"path": "."
 		}
 	],
 
@@ -11,7 +11,13 @@
         {
             "path": ".",
             "folder_exclude_patterns": ["out"],
-            "file_exclude_patterns" : ["*.sublime-workspace", ".gitignore"]
+            "file_exclude_patterns" :
+                [
+                    "*.sublime-workspace",
+                    "Gemfile.lock",
+                    "Gemfile",
+                    ".gitignore"
+                ]
 
         }
     ]
