@@ -1,4 +1,4 @@
-# Day One -> Omnifocus
+# getdayonetags : Day One -> Omnifocus
 Hunts through Day One entries for stuff I've tagged and bungs them into Omnifocus
 
 ## Status

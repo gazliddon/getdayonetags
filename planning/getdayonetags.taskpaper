@@ -1,5 +1,6 @@
 Todo:
-		
+	- Change all devices to DropBox only for DayOne
+	- Add project to github	
 	- Edit project file so it ignores sublime workspace
 	- Can I make it save the worksapce in an out dir? @question
 	- Make a planning dir and put taskpaper in it
