@@ -1,7 +1,7 @@
 require "Thor"
 require "pp"
 
-require "tagstore.rb"
+require "./tagstore.rb"
 
 class Test < Thor
   include Thor::Actions

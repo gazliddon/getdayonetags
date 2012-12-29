@@ -1,16 +1,17 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 require "PList"
-require "cache"
+require "./cache.rb"
 
+module Gaz
 # ---------------------------------------------------------------------------------------------------------------------
 
 def get_tags_from_str str_with_tags
   {
     :tags => str_with_tags.scan( %r{@[^(\s]+} ),
-    :text  => str_with_tags
-  }
-end
+      :text  => str_with_tags
+    }
+  end
 
 # ---------------------------------------------------------------------------------------------------------------------
 # A line containting some tags
@@ -25,8 +26,8 @@ class TaggedLine
 
   def initialize str
     @tags = str_with_tags.scan( %r{@[^(\s]+} ).unique
-    @line = str
-  end
+      @line = str
+    end
 
 end # claa TaggedLine
 
@@ -34,7 +35,7 @@ end # claa TaggedLine
 # A DayOne Entry
 
 class DayOneEntry
-  
+
   attr_accessor :tagged_lines, :tags
 
   @tagged_lines = []
@@ -48,7 +49,7 @@ class DayOneEntry
       # tags
 
       @plist = PList::parse_xml plist_file
-      @plist["File"] plist_file
+      @plist["File"] = plist_file
       @plist["Modification Time"] = File.mtime(plist_file)
 
       @plist["Entry Text"].split("\n").each do |line|
@@ -62,11 +63,11 @@ class DayOneEntry
           @tags << tagged_line
         end
       end
-  end
+    end
 
-  def has_tags?
-    return !@tags.empty?
-  end
+    def has_tags?
+      return !@tags.empty?
+    end
 
 end # class DayOneEntry
 
@@ -77,7 +78,7 @@ class TagStore
 
   @all_tagged_lines = []
 
-  @@plist_cache = Cache do |plist_file|
+  @@plist_cache = Gaz::Cache.new do |plist_file|
     DayOneEntry.new plist_entry
   end
 
@@ -86,12 +87,15 @@ class TagStore
   end
 
   def add_journal journal
-    Dir["#{journal}/**/*.doentry"] do |entry_file|
+    Dir["#{journal}/**/*.doentry"].each do |entry_file|
       day_one_entry =  @@plist_cache.get entry_file
     end
   end
 
 end # class TagStore
+
+end # module Gaz
+
 
 # ---------------------------------------------------------------------------------------------------------------------
 # ends

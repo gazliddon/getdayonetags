@@ -1,22 +1,22 @@
 # ---------------------------------------------------------------------------------------------------------------------
 # Crappy Generalised Cache
-class Cache
+module Gaz
 
-  def initialize &create_func
-    @cache = {}
-    @create_func = create_func
-  end
+  class Cache
 
-  def get my_key
-    unles @cache[my_key]
-      @cache[my_key] = @create_func.call my_key
+    def initialize &create_func
+      @cache = {}
+      @create_func = create_func
     end
 
-    @cache[my_key]
-  end
+    def get my_key
+      @cache[my_key] = @create_func.call(my_key) unless @cache[my_key]
+      @cache[my_key]
+    end
 
-end # class Cache
+  end # class Cache
 
+end
 
 # ---------------------------------------------------------------------------------------------------------------------
 # ends
