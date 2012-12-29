@@ -12,8 +12,8 @@ def get_tags_from_str str_with_tags
   }
 end
 
-
 # ---------------------------------------------------------------------------------------------------------------------
+# A line containting some tags
 class TaggedLine
 
   attr_accessor :tags
@@ -24,13 +24,15 @@ class TaggedLine
   end
 
   def initialize str
-    @tags = str_with_tags.scan( %r{@[^(\s]+} )
+    @tags = str_with_tags.scan( %r{@[^(\s]+} ).unique
     @line = str
   end
 
 end # claa TaggedLine
 
 # ---------------------------------------------------------------------------------------------------------------------
+# A DayOne Entry
+
 class DayOneEntry
   
   attr_accessor :tagged_lines, :tags
