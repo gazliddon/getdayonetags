@@ -2,6 +2,7 @@
 
 require "PList"
 require "./cache.rb"
+require 'digest/md5'
 
 module Gaz
 # ---------------------------------------------------------------------------------------------------------------------
@@ -17,7 +18,7 @@ def get_tags_from_str str_with_tags
 # A line containting some tags
 class TaggedLine
 
-  attr_accessor :tags
+  attr_accessor :tags, :file
 
   def self.contains_tags? _str
     contains_tag_regex = %r{.*@\S+.*}
@@ -25,12 +26,21 @@ class TaggedLine
   end
 
   def initialize str
-    @tags = str.scan( %r{@[^(\s]+} ).uniq
+    @tags = str.scan( %r{@[^(\s\:]+} ).uniq
     @line = str
   end
 
   def has_tag _tag
-    tags.include? _tag
+    ret = false
+    _tag = [_tag] if _tag.class != Array
+
+    _tag.each do |t|
+      if ret == false
+        ret = tags.include?(t)
+      end
+    end
+
+    ret
   end
 
 end # claa TaggedLine
@@ -51,27 +61,28 @@ class DayOneEntry
       # It's the original entry plus some information about
       # tags
 
-      @md5 = Digest::MD5.hexdigest(file_data)
-
-      puts @md5
-      puts
-
       @plist = Plist::parse_xml file_data
+      @md5 = Digest::MD5.hexdigest(file_data)
 
       @plist["File"] = plist_file
       @plist["Modification Time"] = File.mtime(plist_file)
 
       @plist["Entry Text"].split("\n").each do |line|
-        @tagged_lines << TaggedLine.new(line) if TaggedLine.contains_tags? line
+        if TaggedLine::contains_tags? line
+          tl = TaggedLine::new(line)
+          @tagged_lines <<  tl
+        end
       end
 
       # Add what's need to @tags (Tag -> TaggedLine hash)
-
       @tagged_lines.each do |tagged_line|
         tagged_line.tags.each do |tag|
-          @tags[tag] ||= []
-          @tags[tag] << tagged_line
+          if tagged_line.has_tag tag
+            @tags[tag] ||= []
+            @tags[tag] << tagged_line
+          end
         end
+
       end
     end
 
@@ -87,18 +98,26 @@ end # class DayOneEntry
 
 class TagStore
   attr_accessor :tagged_lines
+  attr_accessor :tags
 
   @@plist_cache = Cache.new
 
   def initialize
+    @tags = {}
     @tagged_lines = []
     yield self if block_given?
   end
 
   def add_journal journal
+    # Add all of tags from this journal's entries to the tag store
     Dir["#{journal}/**/*.doentry"].each do |entry_file|
+      
       day_one_entry = get_entry entry_file
+
       @tagged_lines.concat(day_one_entry.tagged_lines)
+      @tags.merge!(day_one_entry.tags) do |key, v1, v2|
+        v1 + v2
+      end
     end
   end
 
@@ -108,11 +127,6 @@ class TagStore
     day_one_entry =  @@plist_cache.get(Digest::MD5.hexdigest(file_data)) do
       DayOneEntry.new file_name, file_data
     end
-  end
-
-  def get_lines_with_tag _tag
-    @tagged_lines.select {|l| l.has_tag _tag}
-
   end
 
   def dump

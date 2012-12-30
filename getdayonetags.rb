@@ -13,32 +13,42 @@ class Test < Thor
     filter = options[:filter]
     tag_ok = filter ? lambda {|x| filter.include? x} : lambda {|x| true}
 
+    @tag_store = Test::get_tag_store
+
+    all_lines = @tag_store.tagged_lines
+
+    if filter
+      all_lines.collect! do |tl|
+        tl if tl.has_tag filter
+      end.uniq!
+    end
+
+    pp @tag_store.tags.keys
+
+
+  end # def tags
+
+  private
+
+  def self.exec com_str
+    %x{#{com_str}}.split("\n").collect { |item| item.rstrip}
+  end
+
+  def self.find_journals
+    journals =  exec %q{mdfind "kMDItemKind == 'Day One Journal' && kMDItemDisplayName =='Journal.dayone'"}
+    lib_dir = File.expand_path "~/Library"
+    journals.select {|j| !%r{^#{lib_dir}/.*$}}
+  end
+
+  def self.get_tag_store
+    journals = find_journals
+
     tag_store = Gaz::TagStore.new do |ts|
       find_journals.each {|journal| ts.add_journal(journal) }
     end
 
-    if filter
-      all_lines = filter.each do |tag|
-        tag_store.get_lines_with_tag tag
-      end.flatten.uniq
-    else
-      all_lines = tag_store.tagged_lines
-    end
+    tag_store
 
-    pp all_lines
-
-  end # def tags
-
-private
-
-  def exec com_str
-    %x{#{com_str}}.split("\n").collect { |item| item.rstrip}
-  end
-
-  def find_journals
-    journals =  exec %q{mdfind "kMDItemKind == 'Day One Journal' && kMDItemDisplayName =='Journal.dayone'"}
-    lib_dir = File.expand_path "~/Library"
-    journals.select {|j| !%r{^#{lib_dir}/.*$}}
   end
 
 end
