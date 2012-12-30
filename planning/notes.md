@@ -1,13 +1,44 @@
-## Notes
+# Database Choice
+I need a simple database to keep track of the following:
 
-## Find DayOne docs
+* Entries I have already scanned
+  * File name
+  * MD5 checksum
+* Tagged lines I have found and sent to OF
+  * Tag line text
+  * Date sent to OF
+  * Link to file it came from
 
-### Solved
+## Immediate Tasks
+For now I'll chuck it in the dev directory. Things I will need:
+
+* Schema
+* Creation script if database doesn't exist
+* Ruby Sqlite3 ORM
+
+ 
+## Candidates - resolved
+Well. squlite3 would probably be the best way to go. It's attractive because:
+
+* Comes as standard on an OSX install
+* Lightweight
+* Works well with CoreData (not relevant to this project but could be useful for GReader)
+* Probably a good ORM for it available with Ruby
+
+**However** part of the reason for doing any of this is to learn as a I go and I'm sort of intrigued by NoSQL databases.
+ 
+Actually typing that just makes me realise how stupid it'd be not to use squlite3 :)
+
+- - -
+# Find DayOne docs
+Need to get a list of all DayOne docs on this machine.
+
+## Solved
 <pre>mdfind "kMDItemKind == 'Day One Journal' && kMDItemDisplayName =='Journal.dayone'"</pre>
 
 Only slight wrinkle is that on my air this also finds a journal in user Library. I filter out anything in that dir.
 
-### Notes
+## Notes
 
 Need to get a list of all DayOne docs. Using spotlight seems a good idea.
 
@@ -40,7 +71,7 @@ kMDItemContentTypeTree         = ("com.dayoneapp.journal"
 	"public.content"
 </pre>
 
-### Success
+## Success
 I can find two Day One journals
 
 Use <pre>mdfind "kMDItemKind == 'Day One Journal'"</pre>
