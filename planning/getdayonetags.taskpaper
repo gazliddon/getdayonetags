@@ -1,4 +1,10 @@
-Todo:
+
+Get Tagged Items Into OF:
+	Finish off getting TagStore working correcty:
+		- tags attribute to return list of tags @done(2012-12-30)
+		- Get sqlite and Sequel in the project
+
+
 Research:
 	- Active record stuff from command line here: 
 		http://www.oreillynet.com/pub/a/ruby/2007/06/21/how-to-build-simple-console-apps-with-ruby-and-activerecord.html
@@ -8,3 +14,5 @@ Notes:
 	- @question Ask on sublime forums if I can overide where the workspace is save via the project file
 	- @read http://net.tutsplus.com/tutorials/tools-and-tips/sublime-text-2-tips-and-tricks/
 Archive:
+	- tagged_lines attribute should be tagged lines - it isn't @done(2012-12-30) @project(Get Tagged Items Into OF / Finish off getting TagStore working correcty)
+	- Copy over theme I like from TP on the air (put themes in dropbox) @done(2012-12-30) @project(Get Tagged Items Into OF)
