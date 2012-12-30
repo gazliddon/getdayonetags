@@ -6,14 +6,6 @@ require 'digest/md5'
 require 'Sequel'
 
 module Gaz
-# ---------------------------------------------------------------------------------------------------------------------
-
-def get_tags_from_str str_with_tags
-  {
-    :tags => str_with_tags.scan( %r{@[^(\s]+} ),
-      :text  => str_with_tags
-    }
-  end
 
 # ---------------------------------------------------------------------------------------------------------------------
 # Persistent database storing information about what I've already sent to OF
@@ -58,7 +50,7 @@ class TagDatabase
       String :line, :size => 1024
     end
   end
-end
+end # class TagDatabase
 
 # ---------------------------------------------------------------------------------------------------------------------
 # A line containting some tags
@@ -89,7 +81,7 @@ class TaggedLine
       ret
     end
 
-end # claa TaggedLine
+end # class TaggedLine
 
 # ---------------------------------------------------------------------------------------------------------------------
 # A DayOne Entry
