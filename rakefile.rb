@@ -5,7 +5,7 @@ task :default do
 	puts "\trake all_tags"
 end
 
-task :tag_filter do
+task :filter_tags do
 	 sh "ruby getdayonetags.rb tags -f @testag"
 end
 
