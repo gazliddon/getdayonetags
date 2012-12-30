@@ -1,7 +1,7 @@
 # Rakefile
 task :default do
 	puts "Either:"
-	puts "\trake tag_filter"
+	puts "\trake filter_tags"
 	puts "\trake all_tags"
 end
 
