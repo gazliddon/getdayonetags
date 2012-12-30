@@ -16,6 +16,51 @@ def get_tags_from_str str_with_tags
   end
 
 # ---------------------------------------------------------------------------------------------------------------------
+# Persistent database storing information about what I've already sent to OF
+class TagDatabase
+
+  def initialize
+    db_file ='out/test.db'
+    exists = File.exists?  db_file
+    @db = Sequel.sqlite(db_file)
+    create_tables unless exists
+  end
+
+  def in_database? file_name, md5
+    f = @db[:files].first(:md5 => md5)
+    if f
+      f[:file] == file_name
+    else
+      false
+    end
+  end
+
+  def add_to_database file_name, md5
+    t = @db[:files]
+    t.insert :file => file_name, :md5 => md5
+  end
+
+  def find_file file_name
+    @db[:files].first(:file => file_name)
+  end
+
+  # Database schema
+  def create_tables
+    @db.create_table :files do
+      primary_key :id
+      String :file, :size => 4096
+      String :md5
+    end
+
+    @db.create_table :tagged_lines do
+      primary_key :id
+      foreign_key :file_id, :files, :key=>:id
+      String :line, :size => 1024
+    end
+  end
+end
+
+# ---------------------------------------------------------------------------------------------------------------------
 # A line containting some tags
 class TaggedLine
 
@@ -96,48 +141,10 @@ class DayOneEntry
 
 end # class DayOneEntry
 
+
+
 # ---------------------------------------------------------------------------------------------------------------------
 # Stores a load of tags with pointers to the lines that contain them
-
-class TagDatabase
-
-  def initialize
-    db_file ='out/test.db'
-    exists = File.exists?  db_file
-    @db = Sequel.sqlite(db_file)
-    create_tables unless exists
-    pp @db[:files]
-  end
-
-  def in_database? file_name, md5
-    f = @db[:files].first(:md5 => md5)
-    if f
-      f[:file] == file_name
-    else
-      false
-    end
-  end
-
-  def add_to_database file_name, md5
-    t = @db[:files]
-    t.insert :file => file_name, :md5 => md5
-  end
-
-  def create_tables
-    @db.create_table :files do
-      primary_key :id
-      String :file
-      String :md5
-    end
-
-    @db.create_table :tagged_lines do
-      primary_key :id
-      foreign_key :file_id, :files
-    end
-  end
-end
-
-
 class TagStore
   attr_accessor :tagged_lines
   attr_accessor :tags
@@ -160,7 +167,23 @@ class TagStore
   def add_to_database day_one_entry
     md5 = day_one_entry.md5
     file = day_one_entry.file
-    @@tagdb.add_to_database(file, md5)
+
+    # was there an old version of the same file?
+    old_file = @@tagdb.find_file file
+
+    if old_file
+      # cycle through the lines we've previously sent to
+      # OF
+      old_file[:tagged_lines].each do |line|
+        text = line[]
+      end
+    end
+
+    # was there an old version of the same file?
+
+    db_entry = @@tagdb.add_to_database(file, md5)
+
+    day_one_entry
   end
 
   def add_journal journal
@@ -176,9 +199,12 @@ class TagStore
     end
 
     entries_to_scan_for_tags.each do |entry|
+
         @tagged_lines.concat(entry.tagged_lines)
         @tags.merge!(entry.tags) { |key, v1, v2| v1 + v2}
-        add_to_database entry
+        
+        db_entry = add_to_database entry
+
         puts "Added #{entry.file}"
     end
 
