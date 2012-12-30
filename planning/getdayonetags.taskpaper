@@ -4,6 +4,11 @@ Get Tagged Items Into OF:
 		- tags attribute to return list of tags @done(2012-12-30)
 		- Get sqlite and Sequel in the project
 
+		- Database schema
+			- File
+				- id
+				- md5
+
 
 Research:
 	- Active record stuff from command line here: 

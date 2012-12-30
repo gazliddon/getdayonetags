@@ -3,6 +3,7 @@
 require "PList"
 require "./cache.rb"
 require 'digest/md5'
+require 'Sequel'
 
 module Gaz
 # ---------------------------------------------------------------------------------------------------------------------
@@ -27,21 +28,21 @@ class TaggedLine
 
   def initialize str
     @tags = str.scan( %r{@[^(\s\:]+} ).uniq
-    @line = str
-  end
-
-  def has_tag _tag
-    ret = false
-    _tag = [_tag] if _tag.class != Array
-
-    _tag.each do |t|
-      if ret == false
-        ret = tags.include?(t)
-      end
+      @line = str
     end
 
-    ret
-  end
+    def has_tag _tag
+      ret = false
+      _tag = [_tag] if _tag.class != Array
+
+      _tag.each do |t|
+        if ret == false
+          ret = tags.include?(t)
+        end
+      end
+
+      ret
+    end
 
 end # claa TaggedLine
 
@@ -50,7 +51,7 @@ end # claa TaggedLine
 
 class DayOneEntry
 
-  attr_accessor :tagged_lines, :tags, :md5
+  attr_accessor :tagged_lines, :tags, :md5, :file
 
   def initialize plist_file, file_data
     @tagged_lines = []
@@ -63,6 +64,8 @@ class DayOneEntry
 
       @plist = Plist::parse_xml file_data
       @md5 = Digest::MD5.hexdigest(file_data)
+
+      @file = plist_file
 
       @plist["File"] = plist_file
       @plist["Modification Time"] = File.mtime(plist_file)
@@ -96,11 +99,51 @@ end # class DayOneEntry
 # ---------------------------------------------------------------------------------------------------------------------
 # Stores a load of tags with pointers to the lines that contain them
 
+class TagDatabase
+
+  def initialize
+    db_file ='out/test.db'
+    exists = File.exists?  db_file
+    @db = Sequel.sqlite(db_file)
+    create_tables unless exists
+    pp @db[:files]
+  end
+
+  def in_database? file_name, md5
+    f = @db[:files].first(:md5 => md5)
+    if f
+      f[:file] == file_name
+    else
+      false
+    end
+  end
+
+  def add_to_database file_name, md5
+    t = @db[:files]
+    t.insert :file => file_name, :md5 => md5
+  end
+
+  def create_tables
+    @db.create_table :files do
+      primary_key :id
+      String :file
+      String :md5
+    end
+
+    @db.create_table :tagged_lines do
+      primary_key :id
+      foreign_key :file_id, :files
+    end
+  end
+end
+
+
 class TagStore
   attr_accessor :tagged_lines
   attr_accessor :tags
 
   @@plist_cache = Cache.new
+  @@tagdb = TagDatabase.new
 
   def initialize
     @tags = {}
@@ -108,17 +151,37 @@ class TagStore
     yield self if block_given?
   end
 
+  def has_this_file_changed? day_one_entry
+    md5 = day_one_entry.md5
+    file = day_one_entry.file
+    !@@tagdb.in_database?(file, md5)
+  end
+
+  def add_to_database day_one_entry
+    md5 = day_one_entry.md5
+    file = day_one_entry.file
+    @@tagdb.add_to_database(file, md5)
+  end
+
   def add_journal journal
     # Add all of tags from this journal's entries to the tag store
+    entries_to_scan_for_tags = []
+
     Dir["#{journal}/**/*.doentry"].each do |entry_file|
-      
       day_one_entry = get_entry entry_file
 
-      @tagged_lines.concat(day_one_entry.tagged_lines)
-      @tags.merge!(day_one_entry.tags) do |key, v1, v2|
-        v1 + v2
+      if has_this_file_changed? day_one_entry
+        entries_to_scan_for_tags << day_one_entry
       end
     end
+
+    entries_to_scan_for_tags.each do |entry|
+        @tagged_lines.concat(entry.tagged_lines)
+        @tags.merge!(entry.tags) { |key, v1, v2| v1 + v2}
+        add_to_database entry
+        puts "Added #{entry.file}"
+    end
+
   end
 
   def get_entry file_name
