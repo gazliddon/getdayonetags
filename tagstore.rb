@@ -29,6 +29,10 @@ class TaggedLine
     @line = str
   end
 
+  def has_tag _tag
+    tags.include? _tag
+  end
+
 end # claa TaggedLine
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -36,9 +40,9 @@ end # claa TaggedLine
 
 class DayOneEntry
 
-  attr_accessor :tagged_lines, :tags
+  attr_accessor :tagged_lines, :tags, :md5
 
-  def initialize plist_file
+  def initialize plist_file, file_data
     @tagged_lines = []
     @tags = {}
     @plist = nil
@@ -47,7 +51,13 @@ class DayOneEntry
       # It's the original entry plus some information about
       # tags
 
-      @plist = Plist::parse_xml plist_file
+      @md5 = Digest::MD5.hexdigest(file_data)
+
+      puts @md5
+      puts
+
+      @plist = Plist::parse_xml file_data
+
       @plist["File"] = plist_file
       @plist["Modification Time"] = File.mtime(plist_file)
 
@@ -69,33 +79,44 @@ class DayOneEntry
       return !@tags.empty?
     end
 
+
 end # class DayOneEntry
 
 # ---------------------------------------------------------------------------------------------------------------------
 # Stores a load of tags with pointers to the lines that contain them
 
 class TagStore
-  attr_accessor :all_tagged_lines
+  attr_accessor :tagged_lines
 
-
-  @@plist_cache = Gaz::Cache.new do |plist_file|
-    DayOneEntry.new plist_file
-  end
+  @@plist_cache = Cache.new
 
   def initialize
-    @all_tagged_lines = []
+    @tagged_lines = []
     yield self if block_given?
   end
 
   def add_journal journal
     Dir["#{journal}/**/*.doentry"].each do |entry_file|
-      day_one_entry =  @@plist_cache.get entry_file
-      @all_tagged_lines.concat(day_one_entry.tagged_lines)
+      day_one_entry = get_entry entry_file
+      @tagged_lines.concat(day_one_entry.tagged_lines)
     end
   end
 
+  def get_entry file_name
+    file_data = File.read(file_name)
+
+    day_one_entry =  @@plist_cache.get(Digest::MD5.hexdigest(file_data)) do
+      DayOneEntry.new file_name, file_data
+    end
+  end
+
+  def get_lines_with_tag _tag
+    @tagged_lines.select {|l| l.has_tag _tag}
+
+  end
+
   def dump
-    pp @all_tagged_lines
+    pp @tagged_lines
   end
 
 end # class TagStore

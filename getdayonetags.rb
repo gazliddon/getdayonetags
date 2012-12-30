@@ -11,13 +11,21 @@ class Test < Thor
 
   def tags
     filter = options[:filter]
-    fp = filter ? lambda {|x| filter.include? x} : lambda {|x| true}
+    tag_ok = filter ? lambda {|x| filter.include? x} : lambda {|x| true}
 
     tag_store = Gaz::TagStore.new do |ts|
       find_journals.each {|journal| ts.add_journal(journal) }
     end
 
-    tag_store.dump
+    if filter
+      all_lines = filter.each do |tag|
+        tag_store.get_lines_with_tag tag
+      end.flatten.uniq
+    else
+      all_lines = tag_store.tagged_lines
+    end
+
+    pp all_lines
 
   end # def tags
 

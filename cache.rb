@@ -6,11 +6,10 @@ module Gaz
 
     def initialize &create_func
       @cache = {}
-      @create_func = create_func
     end
 
-    def get my_key
-      @cache[my_key] = @create_func.call(my_key) unless @cache[my_key]
+    def get my_key, &block
+      @cache[my_key] = yield my_key unless @cache[my_key]
       @cache[my_key]
     end
 
