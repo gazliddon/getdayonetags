@@ -1,8 +1,10 @@
 Get Tagged Items Into OF:
 	- Apply tag filters
-	- Check incoming tagged lines against database ones
-	- Add lines that are new or have changed
-	- Remove all of those that haven't changed from TagStore
+	- Mark lines that I will export
+	- Add @omnifocussed to end of each line
+	- Write plist file back out!
+		- Look at using locking I/O, maybe flock?
+			http://blog.douglasfshearer.com/post/17547062422/threadsafe-file-consistency-in-ruby
 	- Go through lines and add to Omnifocus inbox
 	- That's verision 0.01
 Research:
