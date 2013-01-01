@@ -1,0 +1,12 @@
+#!/bin/bash --login
+# usage: _rvmruby <ruby version> [ruby arguments]
+
+export LC_CTYPE=en_US.UTF-8
+ 
+if [[ -s ~/.rvm/scripts/rvm ]]; then
+  . ~/.rvm/scripts/rvm
+fi
+
+ruby_version=$1; shift
+rvm $ruby_version
+exec ruby "$@"

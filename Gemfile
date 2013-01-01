@@ -5,4 +5,4 @@ gem "thor"
 gem "plist"
 gem 'sqlite3'
 gem 'sequel'
-
+gem 'lunchy'

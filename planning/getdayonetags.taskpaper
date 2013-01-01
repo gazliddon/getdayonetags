@@ -1,18 +1,22 @@
 Get Tagged Items Into OF:
-	- Cycle through lines and
-		- Don't do anything with lines already tagged as omnifocus
-		- Gather tagged lines without an omnifocus tag
-		- Dump to screen
-		- Add of tag
-		- Write file
-	- Change dump to screen to send to OF
 	- That's v 0.1
-Research:
-	- What's the Ruby Lib for bridging to AppleScript?
+	- Do an install in the rakefile
+	
+	- Get running under launchctl @done(2013-01-01)
+		- Doesn't work because of RVM @done(2013-01-01)
 Notes:
 	- @question Ask on sublime forums if I can overide where the workspace is save via the project file
 	- @read http://net.tutsplus.com/tutorials/tools-and-tips/sublime-text-2-tips-and-tricks/
 Archive:
+	Research: @done(2013-01-01) @project(Research)
+		- What's the Ruby Lib for bridging to AppleScript? @done(2013-01-01)
+	- Cycle through lines and @done(2013-01-01) @project(Get Tagged Items Into OF)
+		- Don't do anything with lines already tagged as omnifocus @done(2013-01-01)
+		- Gather tagged lines without an omnifocus tag @done(2013-01-01)
+		- Dump to screen @done(2013-01-01)
+		- Add of tag @done(2013-01-01)
+		- Write file @done(2013-01-01)
+	- Change dump to screen to send to OF @done(2013-01-01) @project(Get Tagged Items Into OF)
 	- Active record stuff from command line here:  @done(2012-12-30) @project(Research)
 		http://www.oreillynet.com/pub/a/ruby/2007/06/21/how-to-build-simple-console-apps-with-ruby-and-activerecord.html
 	- How does bundler work? I need this for adding gems I need @done(2012-12-30) @project(Research)

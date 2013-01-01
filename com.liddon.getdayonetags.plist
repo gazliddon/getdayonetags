@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+        <key>Label</key>
+        <string>getdayonetags</string>
+
+        <key>WorkingDirectory</key>
+        <string>/Users/garyliddon</string>
+
+        <key>ProgramArguments</key>
+        
+        <array>
+                <string>bin/_rvmruby</string>
+                <string>1.9.3</string>
+                <string>bin/getdayonetags.rb</string>
+        </array>
+
+        <key>StartInterval</key>
+        <integer>15</integer>
+
+
+    <key>StandardOutPath</key>
+    <string>myjob.log</string>
+    <key>StandardErrorPath</key>
+    <string>myjob.log</string>
+    
+    <key>Debug</key>
+    <true/>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+</dict>
+</plist>
