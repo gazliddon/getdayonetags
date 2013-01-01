@@ -1,4 +1,11 @@
-# Database Choice
+# Finish Off App
+
+- - -
+
+# Database Choice - Resolved
+Turns out I don't really need a database. I'll re-write the DayOne entry with an @omnifoccused on all transferred tagged lines. Interesting doing some SQLite stuff and using Sequel in Ruby
+
+## Previously
 I need a simple database to keep track of the following:
 
 * Entries I have already scanned
