@@ -1,6 +1,6 @@
 Get Tagged Items Into OF:
 	- That's v 0.1
-	- Do an install in the rakefile
+	- Is this the sort of thing gems are good for? Turn into a gem
 	
 	- Get running under launchctl @done(2013-01-01)
 		- Doesn't work because of RVM @done(2013-01-01)
