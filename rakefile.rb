@@ -1,14 +1,8 @@
-# Rakefile
 task :default do
-	puts "Either:"
-	puts "\trake filter_tags"
-	puts "\trake all_tags"
+	sh "ruby getdayonetags.rb -j out/testjournal.dayone"
 end
 
-task :filter_tags do
-	 sh "ruby getdayonetags.rb tags -f @testag"
-end
-
-task :all_tags do
-	 sh "ruby getdayonetags.rb tags"
+task :copy do
+	sh "rm -rf out && mkdir out"
+	sh "cp -r testdata/* out"
 end

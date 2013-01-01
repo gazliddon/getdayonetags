@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Creation Date</key>
+	<date>2012-12-31T14:22:01Z</date>
+	<key>Entry Text</key>
+	<string>Watching a video about golang. Interesting. It implements reflection pretty well and the loose coupling of objects through interfaces is neat.
+
+Low intra module dependency, objects could implement interfaces and not even know it. It does mean that if you want to support well know interfaces you have to code functions by agreed conventions.
+
+@interesting Wonder if they have adapters that you can use to map an object's methods to an interface it doesn't know about?
+</string>
+	<key>Starred</key>
+	<false/>
+	<key>Time Zone</key>
+	<string>Europe/London</string>
+	<key>UUID</key>
+	<string>2A46EC11E2AA484DA134E312BEA22A50</string>
+</dict>
+</plist>
