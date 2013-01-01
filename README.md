@@ -1,25 +1,38 @@
-# getdayonetags : Day One -> Omnifocus
-Hunts through Day One entries for stuff I've tagged and bungs them into Omnifocus
+# Day One -> Omnifocus
+Scans through all of your DayOne journal entries looking for lines with an @of tag. If it finds one the line is sent to your Omnifocus Inbox. The tag is then changed to @of_sent.
 
-## Status
-Doesn't work :)
+## Usage
 
-## Detail
-When I'm typing my journal I find all sorts of ideas or things to do bubbling up that I'd like to capture. I lose a lot of flow if I stop then and there and go and do the thing I'm thinking of so I like to tag a line with something I can search for later. Here's an example:
+	./getdayonetags.rb
+	
+## Run as a daemon
+This script currently runs as a daemon on my machine but is a bit horribly hardcoded.
 
-<code>
-	@todo Can I get Andrescou slides for talk?
-<code>
+That major horrible assumption is your ruby is running under rvm
 
-I find going through my Day One notes and fishing these out a bit tedious though and all I do is chuck them into my Omnifocus InBox for sorting and classifying anyway.
+This how it works on my machine. First you need to copy the below files to a bin sub-directory in your home directory.
 
-So this script goes:
+		_rvmruby
+		getdayonetags.rb
+		com.liddon.getdayonetags.plist
+	
+So if your user name is garyliidon these files need to be in /Users/garyliddon/bin
 
-* Traverseses all of my Day One documents
-* Finds any tagged lines
-* Have I:
-	* Never seen this tag item before?
-	* Or has it changed?
-	* or Have I never sent it to OF before?
-* If that's true send to OF inbox
+You'll need to edit com.liddon.getdayonetags.plist so the WorkingDirectory key points at your user directory. It's currently set to out to mine. Make sure you have the gems you need installed by running bundle
+
+Once everything is in place you do:
+
+	cd ~
+	lunchy install bin/com.liddon.getdayonetags.plist
+
+
+And everything should be work, the script being run every 15 seconds.
+
+What an awful mess. I'll make a nice install task in the rakefile. At some point.
+
+
+
+
+	
+
 
