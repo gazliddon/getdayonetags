@@ -11,7 +11,7 @@ task :live do
 	file = "~/Dropbox/Apps/Day One/Journal.dayone"
 	file = File.expand_path file
 	sh %Q(cp -r "#{file}" out)
-	sh "ruby getdayonetags.rb -t @of -j out/Journal.dayone"
+	sh "ruby getdayonetags.rb -t @of -i . "
 
 #	sh "ruby getdayonetags.rb -i out"
 end

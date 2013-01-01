@@ -109,26 +109,22 @@ class Test < Thor
 
   desc "tags", "Find all tags"
   default_task :tags
-  method_option :exclude, :type => :array, :required => false, :default=> [], :aliases => "-f"
-  method_option :match, :type => :array, :required => false, :default=> [], :aliases => "-m"
-  method_option :oftag, :type => :string, :required => false, :default=> "@omnifocus", :aliases => "-t"
+  method_option :oftag, :type => :string, :required => false, :default=> "@of", :aliases => "-t"
   method_option :journal, :type => :string, :required => false, :aliases => "-j"
   method_option :ignore_dirs, :type => :array, :required => false, :default=> [], :aliases => "-i"
 
   def tags
     @ignore_dirs = options[:ignore_dirs].collect {|d| File.expand_path d}
     @ignore_dirs << File.expand_path("~/Library")
-    filter = options[:exclude]
     oftag = options[:oftag]
 
     journals = if options[:journal]
       [options[:journal]]
     else
-      find_journals
+      self.class.find_journals @ignore_dirs 
     end
 
     @allentries = journals.collect do |j|
-      puts "Opening journal #{j}"
       Dir["#{j}/**/*.doentry"].collect { |j| DayOneEntry.new j }
     end.flatten
 
@@ -144,7 +140,6 @@ class Test < Thor
     end
 
     @allentries.select {|e| e.dirty}.each do |e|
-      puts "File is dirty #{e}"
       e.write
     end
 
@@ -165,17 +160,9 @@ class Test < Thor
       %x{#{com_str}}.split("\n").collect { |item| item.rstrip}
     end
 
-    def find_journals
+    def find_journals ignore_dirs
       journals =  exec %q{mdfind "kMDItemKind == 'Day One Journal' && kMDItemDisplayName =='Journal.dayone'"}
-      
-      journals.select! do |j|
-        okay = true
-        ignore_dirs.each do |id|
-            okay = !%r{^#{id}/.*$} if okay == true
-        end
-        okay
-      end
-      journals
+      journals.select { |j| !(ignore_dirs.select{ |id| j =~ %r{^#{id}} }.size > 0) }
     end
 
   end
