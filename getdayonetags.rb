@@ -1,21 +1,54 @@
 require "Thor"
 require "pp"
 require "Plist"
+require "./misc.rb"
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Add a task to the OF inbox
+def send_task_to_omnifocus_inbox name, note
+
+  if !is_installed "com.omnigroup.OmniFocus"
+    puts "you need to have omnifocus installed for this script to work"
+    exit 10
+  end
+
+script = <<-eos
+
+set OFName to "#{name}"
+set OFNote to "#{note}"
+
+tell application "OmniFocus"
+  set theDoc to first document
+  tell theDoc
+    make new inbox task with properties {name:OFName, note:OFNote}
+  end tell
+end tell
+
+  eos
+
+  run_apple_script script
+end
 
 # ---------------------------------------------------------------------------------------------------------------------
 # A DayOne Entry
 class TaggedLine
 
+  def self.get_tags str
+    str.scan( %r{@[^(\s\:]+} ).uniq
+  end
+
   attr_accessor :tags, :line
 
   def initialize str
-    @tags = str.scan( %r{@[^(\s\:]+} ).uniq
-      @line = str
-    end
+    @line = str
+    @tags = self.class.get_tags @line
+  end
 
-    def has_tags?
-      @tags.size > 0
-    end
+  def has_tags?
+    @tags.size > 0
+  end
+
 end # class TaggedLine
 
 
@@ -46,20 +79,19 @@ class DayOneEntry
   end
 
   def write _file = @plist_file
+    puts "Writing #{_file}"
     save_plist _file
   end
 
   def collect_tagged_lines!
-    modified = false
+    @tagged_lines.collect! do |l|
+      
+      new_line = yield l.line
 
-    @tagged_lines = @tagged_lines.collect do |l|
-
-      old_line = l.line
-      new_line = yield old_line
-
-      @dirty = true if old_line != new_line
+      @dirty = true if l.line != new_line
 
       l.line = new_line
+
       l
     end
 
@@ -79,12 +111,15 @@ class Test < Thor
   default_task :tags
   method_option :exclude, :type => :array, :required => false, :default=> [], :aliases => "-f"
   method_option :match, :type => :array, :required => false, :default=> [], :aliases => "-m"
-  method_option :seen, :type => :string, :required => false, :default=> "@omnifocus", :aliases => "-s"
+  method_option :oftag, :type => :string, :required => false, :default=> "@omnifocus", :aliases => "-t"
   method_option :journal, :type => :string, :required => false, :aliases => "-j"
+  method_option :ignore_dirs, :type => :array, :required => false, :default=> [], :aliases => "-i"
 
   def tags
+    @ignore_dirs = options[:ignore_dirs].collect {|d| File.expand_path d}
+    @ignore_dirs << File.expand_path("~/Library")
     filter = options[:exclude]
-    seen = options[:seen]
+    oftag = options[:oftag]
 
     journals = if options[:journal]
       [options[:journal]]
@@ -97,22 +132,30 @@ class Test < Thor
       Dir["#{j}/**/*.doentry"].collect { |j| DayOneEntry.new j }
     end.flatten
 
-    @allentries.each do |entry|
-
+    @allentries.collect! do |entry|
       entry.collect_tagged_lines! do |line|
-        line + " @omnifocus"
+        if TaggedLine::get_tags(line).include? oftag
+          line = line.gsub(oftag, "#{oftag}_sent")
+          send_task_to_omnifocus_inbox line, ""
+        end
+        line
       end
+      entry
+    end
 
-      if entry.dirty
-        puts "Writing #{entry}"
-        entry.write
-      end
+    @allentries.select {|e| e.dirty}.each do |e|
+      puts "File is dirty #{e}"
+      e.write
     end
 
   end # def tags
 
- 
+
   private
+
+  def send_to_omnifocus _line
+    add_task_to_omnifocus_inbox _line, ""
+  end
 
   # Syntactic sugar - all methods in the below block are
   # class methods
@@ -124,8 +167,15 @@ class Test < Thor
 
     def find_journals
       journals =  exec %q{mdfind "kMDItemKind == 'Day One Journal' && kMDItemDisplayName =='Journal.dayone'"}
-      lib_dir = File.expand_path "~/Library"
-      journals.select {|j| !%r{^#{lib_dir}/.*$}}
+      
+      journals.select! do |j|
+        okay = true
+        ignore_dirs.each do |id|
+            okay = !%r{^#{id}/.*$} if okay == true
+        end
+        okay
+      end
+      journals
     end
 
   end
