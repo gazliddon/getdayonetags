@@ -17,7 +17,7 @@
         </array>
 
         <key>StartInterval</key>
-        <integer>15</integer>
+        <integer>600</integer>
 
 
     <key>StandardOutPath</key>
